@@ -6,7 +6,12 @@ import DisplayedRune from "./displayed-rune"
 import { AppContext } from "../store/context"
 import { errorChar } from "../k"
 
-const sample = (list: RuneType[]) => list[~~(Math.random() * list.length)]
+const getRandomIndex = (max: number) => ~~(Math.random() * max)
+
+enum DrawType {
+	Draw,
+	Test,
+}
 
 const Draw = () => {
 	const { char: slug } = useParams()
@@ -23,23 +28,26 @@ const Draw = () => {
 		}
 	})
 	const [bag, setBag] = useState<CharacterRunes>(startingBag)
-	const drawAmount = useRef<number>(0)
+	const drawType = useRef<DrawType | null>(null)
+	const drawnRunes = useRef<RuneType[]>([])
 
-	const draw = (amount: number) => {
-		drawAmount.current = amount
-		const drawnRunes: RuneType[] = []
-		for (let i = 0; i < amount; i++) {
-			const r = sample(bag.inBag)
-			drawnRunes.push(r)
+	const draw = (drawn: number = 0, pool: RuneType[] = bag.inBag) => {
+		const amountToDraw = drawType.current === DrawType.Draw ? 3 : 7
+		const randomIndex = getRandomIndex(pool.length)
+		const r = pool[randomIndex]
+		drawnRunes.current = drawnRunes.current.concat(r)
+		const newPool = pool
+			.slice(0, randomIndex)
+			.concat(pool.slice(randomIndex + 1))
+		if (drawn < amountToDraw - 1) {
+			draw(drawn + 1, newPool)
+			return
 		}
-		const newBag: RuneType[] = JSON.parse(JSON.stringify(bag.inBag))
-		drawnRunes.forEach((rune) => {
-			const runeIndex = newBag.findIndex((item) => item === rune)
-			newBag.splice(runeIndex, 1)
-		})
+		const newDrawn = bag.drawn.concat(drawnRunes.current)
+		drawnRunes.current = []
 		setBag({
-			drawn: [...bag.drawn, ...drawnRunes],
-			inBag: newBag,
+			drawn: newDrawn,
+			inBag: newPool,
 		})
 	}
 
@@ -73,7 +81,10 @@ const Draw = () => {
 						disabled={drawDisabled}
 						type="button"
 						className="btn btn-primary"
-						onClick={() => draw(3)}
+						onClick={() => {
+							drawType.current = DrawType.Draw
+							draw()
+						}}
 					>
 						Draw
 					</button>
@@ -83,7 +94,10 @@ const Draw = () => {
 						disabled={testDisabled}
 						type="button"
 						className="btn btn-primary"
-						onClick={() => draw(7)}
+						onClick={() => {
+							drawType.current = DrawType.Test
+							draw()
+						}}
 					>
 						Test
 					</button>
@@ -114,11 +128,13 @@ const Draw = () => {
 				</div>
 			</div>
 			<div className="row text-white text-center m-2">
-				{drawAmount.current === 7 && <div className="col"></div>}
+				{drawType.current === DrawType.Test && <div className="col"></div>}
 				{bag.drawn.map((dr, index) => {
 					const opacity =
-						index < bag.drawn.length - drawAmount.current ? "25" : "100"
-					const col = drawAmount.current === 7 ? 1 : 4
+						drawType.current === DrawType.Test || index >= bag.drawn.length - 3
+							? '100'
+							: '25'
+					const col = drawType.current === DrawType.Test ? 1 : 4
 					const cName = `col-${col} p-1 opacity-${opacity}`
 					return (
 						<div key={`drawn_displayed_rune_${index}`} className={cName}>
@@ -126,7 +142,7 @@ const Draw = () => {
 						</div>
 					)
 				})}
-				{drawAmount.current === 7 && <div className="col"></div>}
+				{drawType.current === DrawType.Test && <div className="col"></div>}
 			</div>
 			<div className="row text-white text-center m-2 mt-4">
 				<div className="col-12">
