@@ -1,15 +1,15 @@
 import { DEFAULT_CHARACTERS, LS_KEY } from "../k"
-import { AppState } from "../types"
+import { Character } from "../types"
 
 // get from ls or initialize empty data
-const getInitialState = (): AppState => {
+const getInitialData = (): Character[] => {
 	const existingData = localStorage.getItem(LS_KEY)
 	if (existingData) {
 		return JSON.parse(existingData)
 	}
-	const data: AppState = { characters: DEFAULT_CHARACTERS }
+	const data: Character[] = DEFAULT_CHARACTERS
 	localStorage.setItem(LS_KEY, JSON.stringify(data))
 	return data
 }
 
-export default getInitialState
+export default getInitialData

@@ -1,30 +1,31 @@
-import { Action, CharacterName, Rune } from "./enums"
+import { ActionType, CharacterName, RuneType } from "./enums"
 
-type OwnedRune = {
-	type: Rune,
+export type Rune = {
+	type: RuneType,
 	count: number,
 }
 
 export type Character = {
 	name: CharacterName,
-	picture: string,
-	runes: OwnedRune[],
+	slug: string,
+	runes: Rune[],
 }
 
-export type AppState = {
-	characters: Character[]
+export type CharacterRunes = {
+	inBag: RuneType[],
+	drawn: RuneType[],
 }
 
-export type SomeAction = {
-	type: Action.Sth
-	payload: any
+export type State = {
+    characters: Character[]
 }
 
-export type SomeOtherAction = {
-	type: Action.Soth
-	payload: any
+export type AddOrRemoveActionPayload = {
+	target: CharacterName
+	type: RuneType
 }
 
-export type AvailableActions =
-	SomeAction |
-	SomeOtherAction
+export type Action =
+	| { type: ActionType.AddRune, payload: AddOrRemoveActionPayload }
+	| { type: ActionType.RemoveRune, payload: AddOrRemoveActionPayload }
+	| { type: ActionType.ResetCharacter, payload: AddOrRemoveActionPayload }
