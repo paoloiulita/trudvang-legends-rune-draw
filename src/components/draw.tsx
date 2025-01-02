@@ -117,14 +117,14 @@ const Draw = () => {
 				{drawAmount.current === 7 && <div className="col"></div>}
 				{bag.drawn.map((dr, index) => {
 					const opacity =
-						index < bag.drawn.length - drawAmount.current ? "25" : "100";
-					const col = drawAmount.current === 7 ? 1 : 4;
-					const cName = `col-${col} p-1 opacity-${opacity}`;
+						index < bag.drawn.length - drawAmount.current ? "25" : "100"
+					const col = drawAmount.current === 7 ? 1 : 4
+					const cName = `col-${col} p-1 opacity-${opacity}`
 					return (
 						<div key={`drawn_displayed_rune_${index}`} className={cName}>
 							<DisplayedRune type={dr} size={35} />
 						</div>
-					);
+					)
 				})}
 				{drawAmount.current === 7 && <div className="col"></div>}
 			</div>
@@ -157,7 +157,7 @@ const Draw = () => {
 				</Link>
 			</div>
 		</>
-	);
+	)
 }
 
 export default Draw

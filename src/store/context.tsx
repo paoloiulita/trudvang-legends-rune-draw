@@ -41,7 +41,7 @@ const reducer = (state: State, action: Action): State => {
 					.concat(state.characters.slice(charIndexToUpdate + 1)),
 			}
 
-			localStorage.setItem(LS_KEY, JSON.stringify(newState.characters));
+			localStorage.setItem(LS_KEY, JSON.stringify(newState.characters))
 
 			return newState
 		}
@@ -80,7 +80,7 @@ const reducer = (state: State, action: Action): State => {
 					.concat(state.characters.slice(charIndexToUpdate + 1)),
 			}
 
-			localStorage.setItem(LS_KEY, JSON.stringify(newState.characters));
+			localStorage.setItem(LS_KEY, JSON.stringify(newState.characters))
 
 			return newState
 		}
