@@ -2,9 +2,10 @@ import { Link, useParams } from "react-router"
 import { useContext, useRef, useState } from "react"
 import { CharacterRunes, Rune } from "../types"
 import { RuneType } from "../enums"
-import DisplayedRune from "./displayed-rune"
 import { AppContext } from "../store/context"
 import { errorChar } from "../k"
+import RenderDraw from "./render-draw"
+import RuneList from "./rune-list"
 
 const getRandomIndex = (max: number) => ~~(Math.random() * max)
 
@@ -127,34 +128,15 @@ const Draw = () => {
 					<h2>Drawn Runes</h2>
 				</div>
 			</div>
-			<div className="row text-white text-center m-2">
-				{drawType.current === DrawType.Test && <div className="col"></div>}
-				{bag.drawn.map((dr, index) => {
-					const opacity =
-						drawType.current === DrawType.Test || index >= bag.drawn.length - 3
-							? '100'
-							: '25'
-					const col = drawType.current === DrawType.Test ? 1 : 4
-					const cName = `col-${col} p-1 opacity-${opacity}`
-					return (
-						<div key={`drawn_displayed_rune_${index}`} className={cName}>
-							<DisplayedRune type={dr} size={35} />
-						</div>
-					)
-				})}
-				{drawType.current === DrawType.Test && <div className="col"></div>}
-			</div>
+			{drawType.current === DrawType.Test && <RuneList runes={bag.drawn} size={40} />}
+			{drawType.current === DrawType.Draw && <RenderDraw runes={bag.drawn} />}
 			<div className="row text-white text-center m-2 mt-4">
 				<div className="col-12">
 					<h2>In the Bag</h2>
 				</div>
 			</div>
 			<div className="row text-white text-center m-2">
-				{bag.inBag.map((dr, index) => (
-					<div key={`inbag_displayed_rune_${index}`} className="col-1 p-2">
-						<DisplayedRune type={dr} size={25} />
-					</div>
-				))}
+				<RuneList runes={bag.inBag} size={25} />
 			</div>
 			<div className="row text-center m-4">
 				<Link

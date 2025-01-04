@@ -105,3 +105,12 @@ charMap.set(CharacterName.Lydana, lydana)
 charMap.set(CharacterName.Kattly, kattly)
 charMap.set(CharacterName.Briya, briya)
 charMap.set(CharacterName.Felerion, felerion)
+
+export const runeOrder = [
+	RuneType.Wild,
+	RuneType.Earth,
+	RuneType.Fire,
+	RuneType.Water,
+	RuneType.Wind,
+	RuneType.Dark,
+]

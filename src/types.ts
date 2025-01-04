@@ -16,6 +16,11 @@ export type CharacterRunes = {
 	drawn: RuneType[],
 }
 
+export type RenderRuneProps = {
+	runes: RuneType[],
+	size: number,
+}
+
 export type State = {
     characters: Character[]
 }
